@@ -2,14 +2,15 @@ from threading import Thread
 import time
 import requests
 import DATA.common_globals as cg
-from AutoRecHandler import AutoRecHandler
+from FUSI.AutoRecHandler import AutoRecHandler
 from COM.now_is import now_is
 
 
 class Monitor(Thread):
-    def __init__(self, bot) -> None:
+    def __init__(self, bot, path) -> None:
         Thread.__init__(self)
         self.bot = bot
+        self.path = path
         self.name = 'MONITOR'
         self.url = "https://cpapi.footseen.xyz/room/queryUserLikeList"
         self.querystring = {
@@ -49,7 +50,7 @@ class Monitor(Thread):
                         if state > 0:
                             if uid not in cg.current_records:
                                 cg.current_records.add(uid)
-                                AutoRecHandler(self.bot, uid, live_data).start()
+                                AutoRecHandler(self.bot, self.path, uid, live_data).start()
                     time.sleep(cg.refresh_freq)
 
                 elif data['code'] == -1000:

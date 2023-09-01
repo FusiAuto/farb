@@ -6,7 +6,7 @@ from COM.now_is import now_is
 
 
 class Record(Thread):
-    def __init__(self, bot, url, live_data, country=None):
+    def __init__(self, bot, path, url, live_data, country=None):
 
         Thread.__init__(self)
         self.bot = bot
@@ -16,7 +16,7 @@ class Record(Thread):
         self.title = live_data['title']
         self.country = country
         now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-        self.filename = f'VIDS/{self.uid}-{now}.mp4'
+        self.filename = f'{path}/VIDS/{self.uid}-{now}.mp4'
         self.status = False
 
     def run(self):
@@ -29,7 +29,7 @@ class Record(Thread):
                                         f'\nTITLE : {self.title}')
         try:
             stream = ffmpeg.input(self.url)
-            stream = ffmpeg.output(stream, self.filename, codec='copy', t=10)
+            stream = ffmpeg.output(stream, self.filename, codec='copy')
             stream = stream.global_args('-nostdin')
             rec = ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
             err = rec[1].decode('utf-8')

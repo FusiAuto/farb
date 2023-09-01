@@ -1,17 +1,18 @@
 import os
 from threading import Thread
-from GetLink import GetLink
-from Record import Record
+from FUSI.GetLink import GetLink
+from FUSI.Record import Record
 import DATA.common_globals as cg
 from COM.get_video_data import get_video_data
-from m3u8_connection import m3u8_test
+from FUSI.m3u8_connection import m3u8_test
 from COM.thumbnails import gen_thumbs
 
 
 class AutoRecHandler(Thread):
-    def __init__(self, bot, uid, live_data) -> None:
+    def __init__(self, bot, path, uid, live_data) -> None:
         Thread.__init__(self)
         self.bot = bot
+        self.path = path
         self.uid = uid
         self.live_data = live_data
 
@@ -20,7 +21,7 @@ class AutoRecHandler(Thread):
         link.get_link()
         if link.hls is not None:
             if m3u8_test(link.hls):
-                rec = Record(self.bot, link.hls, self.live_data, link.country)
+                rec = Record(self.bot, self.path, link.hls, self.live_data, link.country)
                 rec.start()
                 rec.join()
                 cg.current_records.remove(self.uid)

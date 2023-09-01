@@ -22,11 +22,8 @@ def gen_thumbs(source, data):
         thumb_path = source[0:source.rfind('/')]
         temp_path = f'{thumb_path}/TEMP'
 
-        if not os.path.isdir(temp_path):
-            os.mkdir(temp_path)
-
         for i, frame in enumerate(frames):
-            thumb_filename = f'{thumb_path}/TEMP/{thumb_name}-thumb-{i + 1}.png'
+            thumb_filename = f'{temp_path}/{thumb_name}-thumb-{i + 1}.png'
             try:
                 (
                     ffmpeg

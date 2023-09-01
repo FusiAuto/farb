@@ -4,6 +4,10 @@ from FUSI.Monitor import Monitor
 from pyrogram import Client, filters, idle
 from COM.now_is import now_is
 
+PATH = os.getcwd()
+
+if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
+    os.makedirs(f'{PATH}/VIDS/TEMP')
 
 bot = Client("fusi-render",
              api_id=os.environ['API_ID'],
@@ -17,7 +21,7 @@ async def start_command(client, msg):
 
 
 bot.start()
-monitor = Monitor(bot)
+monitor = Monitor(bot, PATH)
 monitor.start()
 print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
 idle()
