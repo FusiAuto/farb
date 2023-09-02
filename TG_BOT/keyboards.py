@@ -13,7 +13,7 @@ def keyboards(keyboard, param=None):
 
     if keyboard == 'freq_main':
         btn1 = InlineKeyboardButton('CHANGE', callback_data=f'freq_set.{param}')
-        btn2 = InlineKeyboardButton('BACK', callback_data='menu')
+        btn2 = InlineKeyboardButton('BACK', callback_data=f'menu.{param}')
         btn3 = InlineKeyboardButton('CLOSE', callback_data=f'close.{param}')
         buttons = [btn1, btn2, btn3]
         kb = InlineKeyboardMarkup([buttons])
