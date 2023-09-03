@@ -40,7 +40,6 @@ async def menu_command(client, msg):
 
 @bot.on_callback_query()
 async def callback_query(client, call):
-    print(call.data)
     cid = call.message.chat.id
     mid = call.message.id
     uid = int(call.data.split('.')[1])
@@ -55,7 +54,7 @@ async def callback_query(client, call):
     if call.data.startswith('menu'):
         await bot.edit_message_text(cid, mid, 'MAIN MENU'
                                               '\n\nSelect option',
-                                    reply_markup=keyboards('menu'))
+                                    reply_markup=keyboards('menu',uid))
 
     # FREQUENCY
     if call.data.startswith('freq_main'):
@@ -66,7 +65,7 @@ async def callback_query(client, call):
                                     reply_markup=keyboards('freq_main', uid))
 
     if call.data.startswith('freq_set'):
-        bm = await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
+        await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                    f'\n\nCurrent frequency : {cg.refresh_freq}s'
                                                    f'\n\nEnter value in seconds (min 1 - 60 max)',
                                          reply_markup=keyboards('freq_back', uid))
