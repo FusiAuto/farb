@@ -37,7 +37,7 @@ async def s_command(client, msg):
     for thread in threading.enumerate():
         text = text + str(thread).lstrip('<').rstrip('>') + '\n\n'
     await msg.reply(text)
-    print(f'{now_is()} - {text}\n')
+    print(f'{now_is()} - {cg.YELLOW}{text}{cg.RESET}\n')
 
 
 @bot.on_message(filters.command('menu'))

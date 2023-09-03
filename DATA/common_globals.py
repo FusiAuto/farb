@@ -1,6 +1,7 @@
 RED = '\033[31m'
 GREEN = '\033[32m'
 BLUE = '\033[34m'
+YELLOW = '\u001b[33m'
 RESET = '\033[0m'
 
 user_token = '6c12e6567060403295a4509881cefb55'     # in config file / change with bot command
