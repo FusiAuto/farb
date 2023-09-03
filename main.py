@@ -1,4 +1,5 @@
 import os
+import threading
 import pyrostep
 import DATA.common_globals as cg
 from pyrogram import Client, filters, idle
@@ -7,10 +8,12 @@ from COM.now_is import now_is
 from TG_BOT.keyboards import keyboards
 from keep_alive import keep_alive
 
+
 PATH = os.getcwd()
 
 if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
     os.makedirs(f'{PATH}/VIDS/TEMP')
+
 
 bot = Client("fusi-render",
              api_id=os.environ['API_ID'],
@@ -19,12 +22,22 @@ bot = Client("fusi-render",
 
 pyrostep.listen(bot)
 
+
 user_menu = {}
 
 
 @bot.on_message(filters.command('start'))
 async def start_command(client, msg):
     await msg.reply('Alive')
+
+
+@bot.on_message(filters.command('s'))
+async def s_command(client, msg):
+    text = ''
+    for thread in threading.enumerate():
+        text = text + str(thread).lstrip('<').rstrip('>') + '\n\n'
+    await msg.reply(text)
+    print(f'{now_is()} - {text}\n')
 
 
 @bot.on_message(filters.command('menu'))
@@ -134,9 +147,10 @@ except ConnectionError:
     pass
 
 bot.start()
-# monitor = Monitor(bot, PATH)
-# monitor.start()
-# keep_alive()
+monitor = Monitor(bot, PATH)
+monitor.daemon = False
+monitor.start()
+keep_alive()
 
 print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
 idle()

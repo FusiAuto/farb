@@ -12,7 +12,7 @@ logging.getLogger('werkzeug').disabled = True
 
 @app.route('/')
 def main():
-    return "Your bot is alive!"
+    return "BOT is alive!"
 
 
 def run():
@@ -20,7 +20,8 @@ def run():
 
 
 def ping():
-    url = os.environ['SELF_URL']
+    url = 'http://127.0.0.1:8080/'
+    # url = os.environ['SELF_URL']
     while True:
         requests.request("GET", url)
         time.sleep(1)
@@ -28,6 +29,8 @@ def ping():
 
 def keep_alive():
     server = Thread(target=run)
+    server.name = 'SERVER'
     server.start()
     monitor = Thread(target=ping)
+    monitor.name = 'PING'
     monitor.start()

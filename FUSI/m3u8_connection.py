@@ -23,6 +23,6 @@ def m3u8_test(bot, link):
                 return False
 
     except Exception as e:
-        print(f'{cg.RED}M3U8 connection test exception{cg.RESET} : {e}')
+        print(f'{cg.RED}M3U8 connection test exception{cg.RESET} : {e}\n')
         bot.send_message(cg.errors, f'M3U8 connection test exception : {e}')
         return False

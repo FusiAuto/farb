@@ -22,7 +22,7 @@ class Record(Thread):
 
     def run(self):
 
-        print(f'\n{now_is()} - {cg.GREEN}AUTO Recording{cg.RESET} {cg.BLUE}ID {self.uid}  |  {self.u_name}'
+        print(f'{now_is()} - {cg.GREEN}AUTO Recording{cg.RESET} {cg.BLUE}ID {self.uid}  |  {self.u_name}'
               f'\n                                     COUNTRY : {self.country}'
               f'\n                                     TITLE : {self.title}{cg.RESET}\n')
         for user in cg.notify_users:
@@ -42,13 +42,13 @@ class Record(Thread):
         except ffmpeg.Error as e:
             err = e.stderr.decode('utf-8')
 
-            print(f'\n{now_is()} - {cg.RED}ffmpeg error{cg.RESET} : {err}\n')
+            print(f'{now_is()} - {cg.RED}ffmpeg error{cg.RESET} : {err}\n')
             self.bot.send_message(cg.errors, f'ffmpeg error : {err}')
 
         if 'time=' in err:
             time = err[err.rfind('time=') + 5:].split('.')[0]
 
-            print(f'\n{now_is()} - {cg.GREEN}Record finished{cg.RESET} '
+            print(f'{now_is()} - {cg.GREEN}Record finished{cg.RESET} '
                   f'{cg.BLUE}ID {self.uid}  |  {self.u_name} - {time}{cg.RESET}\n')
             for user in cg.notify_users:
                 try:
