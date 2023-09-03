@@ -54,14 +54,15 @@ class Monitor(Thread):
                     time.sleep(cg.refresh_freq)
 
                 elif data['code'] == -1000:
+                    self.bot.send_message(cg.errors, 'Token expired')
                     self.bot.send_message(cg.admin, 'Token expired')
                     print(f'\n{now_is()} - Token expired\n')
                     break
 
                 else:
-                    self.bot.send_message(cg.admin, f'Unhandled response : {data}')
+                    self.bot.send_message(cg.errors, f'Unhandled response : {data}')
                     print(f'\n{now_is()} - Unhandled response while checking lives: {data}\n')
                     break
             except Exception as e:
-                self.bot.send_message(cg.admin, f'Error while checking lives : {e}')
+                self.bot.send_message(cg.errors, f'Error while checking lives : {e}')
                 print(f'\n{now_is()} - Error while checking lives : {e}\n')

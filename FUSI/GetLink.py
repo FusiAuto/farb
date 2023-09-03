@@ -41,20 +41,20 @@ class GetLink:
                         self.country = r['roomBaseInfo']['addr']
 
                 else:
-                    print(f'Error while taking link : {response.status_code}')
-                    # self.bot.send_message(cg.admin, f'Error while taking link : {response.status_code}')
+                    print(f'{cg.RED}Error while getting link{cg.RESET} : {response.status_code}')
+                    self.bot.send_message(cg.errors, f'Error while taking link : {response.status_code}')
 
         except requests.exceptions.SSLError:
-            # self.bot.send_message(cg.admin, 'Connection error, try again in few seconds')
-            print('Connection error, try again in few seconds')
+            print(f'{cg.RED}Connection error while getting link{cg.RESET}, {cg.GREEN}trying again{cg.RESET}')
+            self.bot.send_message(cg.errors, 'Connection error while getting link, trying again')
             cg.current_records.remove(self.uid)
 
         except requests.exceptions.ConnectionError:
-            # self.bot.send_message(cg.admin, 'Connection error, try again in few seconds')
-            print('Connection error, try again in few seconds')
+            print(f'{cg.RED}Connection error while getting link{cg.RESET}, {cg.GREEN}trying again{cg.RESET}')
+            self.bot.send_message(cg.errors, 'Connection error while getting link, trying again')
             cg.current_records.remove(self.uid)
 
         except Exception as e:
-            # self.bot.send_message(cg.admin, f'Exception : {e}')
-            print(f'Exception : {e}')
+            self.bot.send_message(cg.errors, f'Exception while getting link : {e}')
+            print(f'{cg.RED}Exception while getting link{cg.RESET} : {e}')
             cg.current_records.remove(self.uid)

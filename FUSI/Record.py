@@ -3,6 +3,7 @@ from threading import Thread
 from datetime import datetime
 import DATA.common_globals as cg
 from COM.now_is import now_is
+from pyrogram.errors import RPCError
 
 
 class Record(Thread):
@@ -24,9 +25,14 @@ class Record(Thread):
         print(f'\n{now_is()} - {cg.GREEN}AUTO Recording{cg.RESET} {cg.BLUE}ID {self.uid}  |  {self.u_name}'
               f'\n                                     COUNTRY : {self.country}'
               f'\n                                     TITLE : {self.title}{cg.RESET}\n')
-        self.bot.send_message(cg.admin, f'⏺ 🎥 AUTO Recording [ID {self.uid}  |  {self.u_name}]({self.url})'
-                                        f'\nCOUNTRY : {self.country}'
-                                        f'\nTITLE : {self.title}')
+        for user in cg.notify_users:
+            try:
+                self.bot.send_message(user, f'⏺ 🎥 AUTO Recording [ID {self.uid}  |  {self.u_name}]({self.url})'
+                                            f'\nCOUNTRY : {self.country}'
+                                            f'\nTITLE : {self.title}')
+            except RPCError:
+                pass
+
         try:
             stream = ffmpeg.input(self.url)
             stream = ffmpeg.output(stream, self.filename, codec='copy')
@@ -37,13 +43,17 @@ class Record(Thread):
             err = e.stderr.decode('utf-8')
 
             print(f'\n{now_is()} - {cg.RED}ffmpeg error{cg.RESET} : {err}\n')
-            self.bot.send_message(cg.admin, f'ffmpeg error : {err}')
+            self.bot.send_message(cg.errors, f'ffmpeg error : {err}')
 
         if 'time=' in err:
             time = err[err.rfind('time=') + 5:].split('.')[0]
 
             print(f'\n{now_is()} - {cg.GREEN}Record finished{cg.RESET} '
                   f'{cg.BLUE}ID {self.uid}  |  {self.u_name} - {time}{cg.RESET}\n')
-            self.bot.send_message(cg.admin, f'⏹ 📼 Record finished ID {self.uid}  |  {self.u_name}  - {time}')
+            for user in cg.notify_users:
+                try:
+                    self.bot.send_message(user, f'⏹ 📼 Record finished ID {self.uid}  |  {self.u_name}  - {time}')
+                except RPCError:
+                    pass
 
             self.status = True

@@ -1,7 +1,8 @@
 import requests
+import DATA.common_globals as cg
 
 
-def m3u8_test(link):
+def m3u8_test(bot, link):
 
     headers = {
         'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; ASUS_Z01QD) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -22,5 +23,6 @@ def m3u8_test(link):
                 return False
 
     except Exception as e:
-        print(f'm3u8 test - Exception : {e}')
+        print(f'{cg.RED}M3U8 connection test exception{cg.RESET} : {e}')
+        bot.send_message(cg.errors, f'M3U8 connection test exception : {e}')
         return False
