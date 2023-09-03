@@ -51,7 +51,7 @@ def gen_thumbs(source, data):
 
             thumbnails.save(thumbs_filename)
 
-        for file in thumb_files:
-            os.remove(file)
+            for file in thumb_files:
+                os.remove(file)
 
     return thumbs_filename

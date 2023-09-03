@@ -18,7 +18,8 @@ if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
 bot = Client("fusi-render",
              api_id=os.environ['API_ID'],
              api_hash=os.environ['API_HASH'],
-             bot_token=os.environ['BOT_TOKEN'])
+             bot_token=os.environ['BOT_TOKEN'],
+             max_concurrent_transmissions=4)
 
 pyrostep.listen(bot)
 
@@ -148,7 +149,6 @@ except ConnectionError:
 
 bot.start()
 monitor = Monitor(bot, PATH)
-monitor.daemon = False
 monitor.start()
 keep_alive()
 

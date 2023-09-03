@@ -12,6 +12,14 @@ logging.getLogger('werkzeug').disabled = True
 
 @app.route('/')
 def main():
+    # monitor = False
+    # for thread in threading.enumerate():
+    #     if thread.name == 'MONITOR':
+    #         monitor = True
+    #
+    # if not monitor:
+    #     pass
+
     return "BOT is alive!"
 
 

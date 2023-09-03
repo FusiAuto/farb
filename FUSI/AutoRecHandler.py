@@ -78,6 +78,7 @@ class AutoRecHandler(Thread):
                         video = bm.video.file_id
                         for user in cg.notify_users:
                             try:
-                                self.bot.send_video(user, video)
+                                self.bot.send_video(user, video,
+                                                    caption=caption)
                             except RPCError:
                                 pass
