@@ -28,6 +28,3 @@ def keep_alive():
     server.start()
     monitor = Thread(target=ping)
     monitor.start()
-
-
-keep_alive()
