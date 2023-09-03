@@ -3,8 +3,11 @@ import time
 import requests
 from flask import Flask
 from threading import Thread
+import logging
+
 
 app = Flask('')
+logging.getLogger('werkzeug').disabled = True
 
 
 @app.route('/')
