@@ -4,7 +4,7 @@ import requests
 from flask import Flask
 from threading import Thread
 import logging
-from pyrogram import Client, idle
+from pyrogram import Client, filters, idle
 import DATA.common_globals as cg
 from COM.now_is import now_is
 from FUSI.AutoRecHandler import AutoRecHandler
@@ -20,9 +20,10 @@ bot = Client("fusi-render",
              max_concurrent_transmissions=4)
 
 try:
-    bot.start()
+    bot.stop()
 except ConnectionError:
     pass
+bot.start()
 
 app = Flask('')
 # logging.getLogger('werkzeug').disabled = True
@@ -92,6 +93,12 @@ def start():
 
 def app_run():
     app.run(host="0.0.0.0", port=8080)
+
+
+# TG BOT
+@bot.on_message(filters.command('start'))
+async def start_command(client, msg):
+    await msg.reply('Alive')
 
 
 def start_server():
