@@ -8,12 +8,10 @@ from COM.now_is import now_is
 from TG_BOT.keyboards import keyboards
 from keep_alive import keep_alive
 
-
 PATH = os.getcwd()
 
 if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
     os.makedirs(f'{PATH}/VIDS/TEMP')
-
 
 bot = Client("fusi-render",
              api_id=os.environ['API_ID'],
@@ -22,7 +20,6 @@ bot = Client("fusi-render",
              max_concurrent_transmissions=4)
 
 pyrostep.listen(bot)
-
 
 user_menu = {}
 
@@ -68,7 +65,7 @@ async def callback_query(client, call):
     if call.data.startswith('menu'):
         await bot.edit_message_text(cid, mid, 'MAIN MENU'
                                               '\n\nSelect option',
-                                    reply_markup=keyboards('menu',uid))
+                                    reply_markup=keyboards('menu', uid))
 
     # FREQUENCY
     if call.data.startswith('freq_main'):
@@ -80,9 +77,9 @@ async def callback_query(client, call):
 
     if call.data.startswith('freq_set'):
         await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
-                                                   f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                   f'\n\nEnter value in seconds (min 1 - 60 max)',
-                                         reply_markup=keyboards('freq_back', uid))
+                                              f'\n\nCurrent frequency : {cg.refresh_freq}s'
+                                              f'\n\nEnter value in seconds (min 1 - 60 max)',
+                                    reply_markup=keyboards('freq_back', uid))
         await pyrostep.register_next_step(uid, freq_set)
 
 
@@ -142,16 +139,19 @@ async def freq_set(client, msg):
                                         reply_markup=keyboards('freq_back', uid))
             await pyrostep.register_next_step(uid, freq_set)
 
+
 try:
     bot.stop()
 except ConnectionError:
     pass
 
 bot.start()
-monitor = Monitor(bot, PATH)
-monitor.start()
-keep_alive()
+bot.start()
 
-print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
-idle()
-bot.stop()
+# monitor = Monitor(bot, PATH)
+# monitor.start()
+# keep_alive()
+#
+# print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
+# idle()
+# bot.stop()

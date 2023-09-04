@@ -12,7 +12,7 @@ class Monitor(Thread):
         self.bot = bot
         self.path = path
         self.name = 'MONITOR'
-        self.url = "https://cpapi.footseen.xyz/room/queryUserLikeList"
+        self.url = cg.lives_url
         self.querystring = {
             "lang": "1",
             "os": "h5",
@@ -23,9 +23,9 @@ class Monitor(Thread):
             "pageNum": "1",
             "pageSize": "99",  # what max ?
             "pass": "true",
-            "pageID": "56f901109e787c055c5ca8bd872fe88b"
+            "pageID": cg.page_id
         }
-        self.headers = {"referer": "https://www.footseen.xyz/"}
+        self.headers = {"referer": cg.referer}
         self.stop = False
 
     def run(self) -> None:

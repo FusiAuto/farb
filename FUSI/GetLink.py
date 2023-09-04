@@ -6,17 +6,17 @@ class GetLink:
     def __init__(self, bot, uid):
         self.bot = bot
         self.uid = uid
-        self.url = "https://cpapi.footseen.xyz/room/enterRoom"
+        self.url = cg.links_url
         self.querystring = {
             "lang": "1",
             "os": "h5",
             "cid": "ftsH5",
             "webVersion": "1000",
             "roomId": uid,
-            "pageID": "56f901109e787c055c5ca8bd872fe88b"
+            "pageID": cg.page_id
         }
         self.headers = {
-            "Host": "cpapi.footseen.xyz",
+            "Host": cg.host,
             "accept": "application/json, text/javascript, */*; q=0.01",
             "user-agent": "Mozilla/5.0 (Linux; Android 7.1.2; ASUS_Z01QD) AppleWebKit/537.36 "
                           "(KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
@@ -24,7 +24,7 @@ class GetLink:
             "sec-fetch-site": "same-site",
             "sec-fetch-mode": "cors",
             "sec-fetch-dest": "empty",
-            "referer": "https://www.footseen.xyz/",
+            "referer": cg.referer,
             "accept-encoding": "gzip, deflate, br",
             "accept-language": "en-US,en;q=0.9"
         }
