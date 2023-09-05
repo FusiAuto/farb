@@ -74,3 +74,14 @@ def keyboards(keyboard, param=None):
         buttons = [[btn1, btn2]]
         kb = InlineKeyboardMarkup(buttons)
         return kb
+
+    # UNLOCK
+    if keyboard == 'unlock':
+        buttons = []
+        for uid in cg.current_records:
+            btn = InlineKeyboardButton(f'{uid}', callback_data=f'unlock.{uid}')
+            buttons.append([btn])
+        btn1 = InlineKeyboardButton('CLOSE', callback_data=f'exit')
+        buttons.append([btn1])
+        kb = InlineKeyboardMarkup(buttons)
+        return kb

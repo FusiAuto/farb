@@ -1,5 +1,5 @@
 import os
-from threading import Thread
+from threading import Thread, Lock
 from FUSI.GetLink import GetLink
 from FUSI.Record import Record
 import DATA.common_globals as cg
@@ -16,6 +16,7 @@ class AutoRecHandler(Thread):
         self.path = path
         self.uid = uid
         self.live_data = live_data
+        self.lock = Lock()
 
     def run(self):
         link = GetLink(self.bot, self.uid)
@@ -25,7 +26,11 @@ class AutoRecHandler(Thread):
                 rec = Record(self.bot, self.path, link.hls, self.live_data, link.country)
                 rec.start()
                 rec.join()
-                cg.current_records.remove(self.uid)
+                with self.lock:
+                    try:
+                        cg.current_records.remove(self.uid)
+                    except KeyError:
+                        pass
 
                 status = rec.status
                 if status:

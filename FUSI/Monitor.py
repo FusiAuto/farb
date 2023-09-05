@@ -48,10 +48,11 @@ class Monitor(Thread):
                                      'name': name,
                                      'title': title}
 
-                        if state > 0:
+                        if state == 1:
                             if uid not in cg.current_records:
                                 cg.current_records.add(uid)
                                 AutoRecHandler(self.bot, self.path, uid, live_data).start()
+
                     time.sleep(cg.refresh_freq)
 
                 elif data['code'] == -1000:

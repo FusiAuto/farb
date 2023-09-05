@@ -29,8 +29,18 @@ async def start_command(client, msg):
     await msg.reply('Alive')
 
 
-@bot.on_message(filters.command('s'))
-async def s_command(client, msg):
+@bot.on_message(filters.command('current'))
+async def c_command(client, msg):
+    await msg.reply(cg.current_records)
+
+
+@bot.on_message(filters.command('unlock'))
+async def u_command(client, msg):
+    await msg.reply('Tap ID to unlock', reply_markup=keyboards('unlock'))
+
+
+@bot.on_message(filters.command('threads'))
+async def t_command(client, msg):
     text = ''
     for thread in threading.enumerate():
         text = text + str(thread).lstrip('<').rstrip('>') + '\n\n'
@@ -53,7 +63,10 @@ async def menu_command(client, msg):
 async def callback_query(client, call):
     cid = call.message.chat.id
     mid = call.message.id
-    uid = int(call.data.split('.')[1])
+    try:
+        uid = int(call.data.split('.')[1])
+    except IndexError:
+        uid = 0
 
     # CLOSE
     if call.data.startswith('close'):
@@ -81,6 +94,17 @@ async def callback_query(client, call):
                                               f'\n\nEnter value in seconds (min 1 - 60 max)',
                                     reply_markup=keyboards('freq_back', uid))
         await pyrostep.register_next_step(uid, freq_set)
+
+    # UNLOCK
+    if call.data.startswith('unlock'):
+        unlock_id = int(call.data.split('.')[1])
+        try:
+            cg.current_records.remove(unlock_id)
+        except KeyError:
+            pass
+
+    if call.data == 'exit':
+        await bot.delete_messages(cid, mid)
 
 
 # STEP HANDLERS
@@ -146,12 +170,11 @@ except ConnectionError:
     pass
 
 bot.start()
-bot.start()
 
-# monitor = Monitor(bot, PATH)
-# monitor.start()
+monitor = Monitor(bot, PATH)
+monitor.start()
 # keep_alive()
 #
-# print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
-# idle()
-# bot.stop()
+print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
+idle()
+bot.stop()

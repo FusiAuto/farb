@@ -12,6 +12,8 @@ from FUSI.AutoRecHandler import AutoRecHandler
 
 PATH = os.getcwd()
 
+if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
+    os.makedirs(f'{PATH}/VIDS/TEMP')
 
 bot = Client("fusi-render",
              api_id=24327835,
@@ -105,9 +107,8 @@ def start_server():
     server = Thread(target=app_run)
     server.name = 'SERVER'
     server.start()
-    bot_idle = Thread(target=idle())
-    bot_idle.name = 'BOT IDLE'
-    bot_idle.start()
+    print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
+    idle()
 
 
 start_server()
