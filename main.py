@@ -45,7 +45,6 @@ async def t_command(client, msg):
     for thread in threading.enumerate():
         text = text + str(thread).lstrip('<').rstrip('>') + '\n\n'
     await msg.reply(text)
-    print(f'{now_is()} - {cg.YELLOW}{text}{cg.RESET}\n')
 
 
 @bot.on_message(filters.command('menu'))
@@ -100,6 +99,7 @@ async def callback_query(client, call):
         unlock_id = int(call.data.split('.')[1])
         try:
             cg.current_records.remove(unlock_id)
+            await bot.edit_message_text(cid, mid, 'Tap ID to unlock', reply_markup=keyboards('unlock'))
         except KeyError:
             pass
 

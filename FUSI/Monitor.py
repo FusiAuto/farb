@@ -53,18 +53,23 @@ class Monitor(Thread):
                                 cg.current_records.add(uid)
                                 AutoRecHandler(self.bot, self.path, uid, live_data).start()
 
+                        if state == 0:
+                            if uid in cg.current_records:
+                                print(f'{now_is()} - {cg.BLUE}{uid}{cg.RESET} '
+                                      f'{cg.YELLOW}state 0 found in cr{cg.RESET}\n')
+
                     time.sleep(cg.refresh_freq)
 
                 elif data['code'] == -1000:
                     self.bot.send_message(cg.errors, 'Token expired')
                     self.bot.send_message(cg.admin, 'Token expired')
-                    print(f'{now_is()} - Token expired\n')
+                    print(f'{now_is()} - {cg.RED}Token expired{cg.RESET}\n')
                     break
 
                 else:
                     self.bot.send_message(cg.errors, f'Unhandled response : {data}')
-                    print(f'{now_is()} - Unhandled response while checking lives: {data}\n')
+                    print(f'{now_is()} - {cg.RED}Unhandled response while checking lives{cg.RESET} : {data}\n')
                     break
             except Exception as e:
                 self.bot.send_message(cg.errors, f'Error while checking lives : {e}')
-                print(f'{now_is()} - Error while checking lives : {e}\n')
+                print(f'{now_is()} - {cg.RED}Error while checking lives{cg.RESET} : {e}\n')
