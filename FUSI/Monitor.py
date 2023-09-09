@@ -35,7 +35,7 @@ class Monitor(Thread):
                 data = response.json()
 
                 # print(len(data['rooms']))
-                print(f'{now_is()} - {cg.YELLOW}check{cg.RESET}')
+                # print(f'{now_is()} - {cg.YELLOW}check{cg.RESET}')
 
                 if data['code'] == 1:
                     for room in data['rooms']:
