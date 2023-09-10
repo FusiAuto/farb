@@ -4,6 +4,10 @@ from COM.load import load
 
 
 def config(path):
+
+    if not os.path.isdir(f'{cg.PATH}/VIDS/TEMP'):
+        os.makedirs(f'{cg.PATH}/VIDS/TEMP')
+
     rfq_path = f'{path}/DATA/refresh_freq'
     err_path = f'{path}/DATA/errors'
     tgt_path = f'{path}/DATA/target'
@@ -29,9 +33,12 @@ def config(path):
 
     if os.path.isfile(cfg_path):
         cfg = load(cfg_path)
+        print(cfg)
         cg.fs_user_token = cfg['fs_user_token']
         cg.fs_user_uid = cfg['fs_user_uid']
         cg.target = cfg['target']
         cg.errors = cfg['errors']
+        cg.refresh_freq = cfg['refresh_freq']
         cg.MASTER = cfg['MASTER']
         cg.admins = cfg['admins']
+        cg.notify_users.add(cg.MASTER)

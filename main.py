@@ -4,16 +4,16 @@ import pyrostep
 import DATA.common_globals as cg
 from pyrogram import Client, filters, idle, enums
 from pyrogram.errors import RPCError
+from COM.config import config
 from COM.save import save
 from FUSI.Monitor import Monitor
 from COM.now_is import now_is
 from TG_BOT.keyboards import keyboards
-from keep_alive import keep_alive
+# from keep_alive import keep_alive
 
-PATH = os.getcwd()
 
-if not os.path.isdir(f'{PATH}/VIDS/TEMP'):
-    os.makedirs(f'{PATH}/VIDS/TEMP')
+cg.PATH = os.getcwd()
+
 
 bot = Client("fusi-render",
              api_id=os.environ['API_ID'],
@@ -29,10 +29,6 @@ user_menu = {}
 @bot.on_message(filters.command('start'))
 async def start_command(client, msg):
     await msg.reply('Alive')
-    try:
-        await bot.send_chat_action(-1001854111266, enums.ChatAction.TYPING)
-    except RPCError as e:
-        print(e)
 
 
 @bot.on_message(filters.command('current'))
@@ -213,7 +209,7 @@ async def freq_set(client, msg):
 
             else:
                 cg.refresh_freq = new
-                save(cg.refresh_freq, f'{PATH}/DATA/refresh_freq')
+                save(cg.refresh_freq, f'{cg.PATH}/DATA/refresh_freq')
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
                                                       f'\n\n✅ Frequency changed',
@@ -267,7 +263,7 @@ async def target_set(client, msg):
                 try:
                     await bot.send_chat_action(target, enums.ChatAction.TYPING)
                     cg.target = target
-                    save(cg.target, f'{PATH}/DATA/target')
+                    save(cg.target, f'{cg.PATH}/DATA/target')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
                                                           f'\n\nCurrent target ID : {cg.target}'
                                                           f'\n\n✅ Target changed',
@@ -330,7 +326,7 @@ async def error_set(client, msg):
                 try:
                     await bot.send_chat_action(errors, enums.ChatAction.TYPING)
                     cg.errors = errors
-                    save(cg.errors, f'{PATH}/DATA/errors')
+                    save(cg.errors, f'{cg.PATH}/DATA/errors')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
                                                           f'\n\nCurrent errors log ID : {cg.errors}'
                                                           f'\n\n✅ Errors log group changed',
@@ -364,7 +360,8 @@ except ConnectionError:
 
 bot.start()
 
-monitor = Monitor(bot, PATH)
+config(cg.PATH)
+monitor = Monitor(bot, cg.PATH)
 monitor.start()
 # keep_alive()
 #
