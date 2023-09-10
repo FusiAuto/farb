@@ -18,26 +18,28 @@ class AutoRecHandler(Thread):
         self.live_data = live_data
         self.lock = Lock()
 
+    def clean(self):
+        with self.lock:
+            try:
+                cg.current_records.remove(self.uid)
+            except KeyError:
+                pass
+
     def run(self):
         link = GetLink(self.bot, self.uid)
         link.get_link()
         if link.hls is None:
-            with self.lock:
-                try:
-                    cg.current_records.remove(self.uid)
-                except KeyError:
-                    pass
+            self.clean()
 
         else:
-            if m3u8_test(self.bot, link.hls):
+            if not m3u8_test(self.bot, link.hls):
+                self.clean()
+
+            else:
                 rec = Record(self.bot, self.path, link.hls, self.live_data, link.country)
                 rec.start()
                 rec.join()
-                with self.lock:
-                    try:
-                        cg.current_records.remove(self.uid)
-                    except KeyError:
-                        pass
+                self.clean()
 
                 status = rec.status
                 if status:
