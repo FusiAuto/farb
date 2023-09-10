@@ -360,11 +360,11 @@ except ConnectionError:
 
 bot.start()
 
-config(cg.PATH)
-monitor = Monitor(bot, cg.PATH)
+config()
+monitor = Monitor(bot)
 monitor.start()
 # keep_alive()
-#
+
 print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
 idle()
 bot.stop()

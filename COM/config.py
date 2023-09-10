@@ -3,16 +3,16 @@ import DATA.common_globals as cg
 from COM.load import load
 
 
-def config(path):
+def config():
 
     if not os.path.isdir(f'{cg.PATH}/VIDS/TEMP'):
         os.makedirs(f'{cg.PATH}/VIDS/TEMP')
 
-    rfq_path = f'{path}/DATA/refresh_freq'
-    err_path = f'{path}/DATA/errors'
-    tgt_path = f'{path}/DATA/target'
-    fs_api_path = f'{path}/DATA/fs_api'
-    cfg_path = f'{path}/DATA/config'
+    rfq_path = f'{cg.PATH}/DATA/refresh_freq'
+    err_path = f'{cg.PATH}/DATA/errors'
+    tgt_path = f'{cg.PATH}/DATA/target'
+    fs_api_path = f'{cg.PATH}/DATA/fs_api'
+    cfg_path = f'{cg.PATH}/DATA/config'
 
     if os.path.isfile(rfq_path):
         cg.refresh_freq = load(rfq_path)
@@ -33,7 +33,6 @@ def config(path):
 
     if os.path.isfile(cfg_path):
         cfg = load(cfg_path)
-        print(cfg)
         cg.fs_user_token = cfg['fs_user_token']
         cg.fs_user_uid = cfg['fs_user_uid']
         cg.target = cfg['target']

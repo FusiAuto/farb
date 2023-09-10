@@ -7,7 +7,7 @@ from pyrogram.errors import RPCError
 
 
 class Record(Thread):
-    def __init__(self, bot, path, url, live_data, country=None):
+    def __init__(self, bot, url, live_data, country=None):
 
         Thread.__init__(self)
         self.bot = bot
@@ -17,7 +17,7 @@ class Record(Thread):
         self.title = live_data['title']
         self.country = country
         now = datetime.now().strftime("%d-%m-%Y-%H-%M-%S")
-        self.filename = f'{path}/VIDS/{self.uid}-{now}.mp4'
+        self.filename = f'{cg.PATH}/VIDS/{self.uid}-{now}.mp4'
         self.status = False
 
     def run(self):

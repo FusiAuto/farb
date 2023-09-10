@@ -7,10 +7,9 @@ from COM.now_is import now_is
 
 
 class Monitor(Thread):
-    def __init__(self, bot, path) -> None:
+    def __init__(self, bot) -> None:
         Thread.__init__(self)
         self.bot = bot
-        self.path = path
         self.name = 'MONITOR'
         self.url = cg.lives_url
         self.querystring = {
@@ -51,7 +50,7 @@ class Monitor(Thread):
                         if state == 1:
                             if uid not in cg.current_records:
                                 cg.current_records.add(uid)
-                                AutoRecHandler(self.bot, self.path, uid, live_data).start()
+                                AutoRecHandler(self.bot, uid, live_data).start()
 
                         if state == 0:
                             if uid in cg.current_records:

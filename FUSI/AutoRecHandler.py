@@ -10,10 +10,9 @@ from pyrogram.errors import RPCError
 
 
 class AutoRecHandler(Thread):
-    def __init__(self, bot, path, uid, live_data) -> None:
+    def __init__(self, bot, uid, live_data) -> None:
         Thread.__init__(self)
         self.bot = bot
-        self.path = path
         self.uid = uid
         self.live_data = live_data
         self.lock = Lock()
@@ -36,7 +35,7 @@ class AutoRecHandler(Thread):
                 self.clean()
 
             else:
-                rec = Record(self.bot, self.path, link.hls, self.live_data, link.country)
+                rec = Record(self.bot, link.hls, self.live_data, link.country)
                 rec.start()
                 rec.join()
                 self.clean()
