@@ -31,7 +31,10 @@ async def start_command(client, msg):
 
 @bot.on_message(filters.command('current'))
 async def c_command(client, msg):
-    await msg.reply(cg.current_records)
+    if len(cg.current_records) > 0:
+        await msg.reply(cg.current_records)
+    else:
+        await msg.reply('Empty')
 
 
 @bot.on_message(filters.command('unlock'))
@@ -93,6 +96,52 @@ async def callback_query(client, call):
                                               f'\n\nEnter value in seconds (min 1 - 60 max)',
                                     reply_markup=keyboards('freq_back', uid))
         await pyrostep.register_next_step(uid, freq_set)
+
+    # VIDEO TARGET
+    if call.data.startswith('target_main'):
+        await pyrostep.unregister_steps(uid)
+        if cg.target is None:
+            await bot.edit_message_text(cid, mid, f'Set basic target group for videos',
+                                        reply_markup=keyboards('target_main', uid))
+        else:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                  f'\n\nCurrent target ID : {cg.target}',
+                                        reply_markup=keyboards('target_main', uid))
+
+    if call.data.startswith('target_set'):
+        if cg.target is None:
+            await bot.edit_message_text(cid, mid, f'Set basic target group for videos'
+                                                  f'\n\nEnter group ID',
+                                        reply_markup=keyboards('target_back', uid))
+        else:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                  f'\n\nCurrent target ID : {cg.target}'
+                                                  f'\n\nEnter group ID',
+                                        reply_markup=keyboards('target_back', uid))
+        await pyrostep.register_next_step(uid, target_set)
+
+    # ERROR TARGET
+    if call.data.startswith('error_main'):
+        await pyrostep.unregister_steps(uid)
+        if cg.target is None:
+            await bot.edit_message_text(cid, mid, f'Set basic target group for errors',
+                                        reply_markup=keyboards('error_main', uid))
+        else:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                  f'\n\nCurrent target ID : {cg.errors}',
+                                        reply_markup=keyboards('error_main', uid))
+
+    if call.data.startswith('target_set'):
+        if cg.target is None:
+            await bot.edit_message_text(cid, mid, f'Set basic target group for errors'
+                                                  f'\n\nEnter errors log group ID',
+                                        reply_markup=keyboards('error_back', uid))
+        else:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                  f'\n\nCurrent errors log ID : {cg.errors}'
+                                                  f'\n\nEnter group ID',
+                                        reply_markup=keyboards('error_back', uid))
+        await pyrostep.register_next_step(uid, error_set)
 
     # UNLOCK
     if call.data.startswith('unlock'):
@@ -162,6 +211,40 @@ async def freq_set(client, msg):
                                                   f'\n\n!!! Value must be digit !!!',
                                         reply_markup=keyboards('freq_back', uid))
             await pyrostep.register_next_step(uid, freq_set)
+
+
+async def target_set(client, msg):
+    cid = msg.chat.id
+    uid = msg.from_user.id
+    mid = user_menu[uid].id
+    await bot.delete_messages(cid, msg.id)
+
+    if msg.text is None:
+        await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                              f'\n\nCurrent target ID : {cg.target}'
+                                              f'\n\nEnter group ID'
+                                              f'\n\n!!! Value must be negative digit !!!',
+                                    reply_markup=keyboards('freq_back', uid))
+        await pyrostep.register_next_step(uid, freq_set)
+
+    else:
+        try:
+            target = int(msg.text)
+            # ciąg dalszy
+        except ValueError:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                  f'\n\nCurrent target ID : {cg.target}'
+                                                  f'\n\nEnter group ID'
+                                                  f'\n\n!!! Value must be negative digit !!!',
+                                        reply_markup=keyboards('freq_back', uid))
+            await pyrostep.register_next_step(uid, freq_set)
+
+
+async def error_set(client, msg):
+    cid = msg.chat.id
+    uid = msg.from_user.id
+    mid = user_menu[uid].id
+    await bot.delete_messages(cid, msg.id)
 
 
 try:

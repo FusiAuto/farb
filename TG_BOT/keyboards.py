@@ -5,7 +5,7 @@ import DATA.common_globals as cg
 def keyboards(keyboard, param=None):
     if keyboard == 'menu':
         btn1 = InlineKeyboardButton('MONITOR FREQUENCY', callback_data=f'freq_main.{param}')
-        btn2 = InlineKeyboardButton('VIDEO TARGET', callback_data=f'video_main.{param}')
+        btn2 = InlineKeyboardButton('VIDEO TARGET', callback_data=f'target_main.{param}')
         btn3 = InlineKeyboardButton('ERROR TARGET', callback_data=f'error_main.{param}')
         btn4 = InlineKeyboardButton('CLOSE', callback_data=f'close.{param}')
         buttons = [[btn1], [btn2], [btn3], [btn4]]
@@ -32,11 +32,11 @@ def keyboards(keyboard, param=None):
         return kb
 
     # VIDEO TARGET
-    if keyboard == 'video_main':
+    if keyboard == 'target_main':
         if cg.target is None:
-            btn1 = InlineKeyboardButton('SET', callback_data=f'video_set.{param}')
+            btn1 = InlineKeyboardButton('SET', callback_data=f'target_set.{param}')
         else:
-            btn1 = InlineKeyboardButton('CHANGE', callback_data=f'video_set.{param}')
+            btn1 = InlineKeyboardButton('CHANGE', callback_data=f'target_set.{param}')
         btn2 = InlineKeyboardButton('BACK', callback_data=f'menu.{param}')
         btn3 = InlineKeyboardButton('CLOSE', callback_data=f'close.{param}')
         buttons = [
@@ -46,8 +46,8 @@ def keyboards(keyboard, param=None):
         kb = InlineKeyboardMarkup(buttons)
         return kb
 
-    if keyboard == 'freq_back':
-        btn1 = InlineKeyboardButton('BACK', callback_data=f'video_main.{param}')
+    if keyboard == 'target_back':
+        btn1 = InlineKeyboardButton('BACK', callback_data=f'target_main.{param}')
         btn2 = InlineKeyboardButton('CLOSE', callback_data=f'close.{param}')
         buttons = [[btn1, btn2]]
         kb = InlineKeyboardMarkup(buttons)
