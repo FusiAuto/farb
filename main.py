@@ -2,7 +2,8 @@ import os
 import threading
 import pyrostep
 import DATA.common_globals as cg
-from pyrogram import Client, filters, idle
+from pyrogram import Client, filters, idle, enums
+from pyrogram.errors import RPCError
 from FUSI.Monitor import Monitor
 from COM.now_is import now_is
 from TG_BOT.keyboards import keyboards
@@ -27,6 +28,10 @@ user_menu = {}
 @bot.on_message(filters.command('start'))
 async def start_command(client, msg):
     await msg.reply('Alive')
+    try:
+        await bot.send_chat_action(-1001854111266, enums.ChatAction.TYPING)
+    except RPCError as e:
+        print(e)
 
 
 @bot.on_message(filters.command('current'))
@@ -93,7 +98,7 @@ async def callback_query(client, call):
     if call.data.startswith('freq_set'):
         await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                               f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                              f'\n\nEnter value in seconds (min 1 - 60 max)',
+                                              f'\n\nEnter value in seconds (min 1 - 60 max) 💬',
                                     reply_markup=keyboards('freq_back', uid))
         await pyrostep.register_next_step(uid, freq_set)
 
@@ -111,12 +116,12 @@ async def callback_query(client, call):
     if call.data.startswith('target_set'):
         if cg.target is None:
             await bot.edit_message_text(cid, mid, f'Set basic target group for videos'
-                                                  f'\n\nEnter group ID',
+                                                  f'\n\nEnter group ID 💬',
                                         reply_markup=keyboards('target_back', uid))
         else:
             await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
                                                   f'\n\nCurrent target ID : {cg.target}'
-                                                  f'\n\nEnter group ID',
+                                                  f'\n\nEnter group ID 💬',
                                         reply_markup=keyboards('target_back', uid))
         await pyrostep.register_next_step(uid, target_set)
 
@@ -128,18 +133,18 @@ async def callback_query(client, call):
                                         reply_markup=keyboards('error_main', uid))
         else:
             await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
-                                                  f'\n\nCurrent target ID : {cg.errors}',
+                                                  f'\n\nCurrent errors log ID : {cg.errors}',
                                         reply_markup=keyboards('error_main', uid))
 
-    if call.data.startswith('target_set'):
+    if call.data.startswith('error_set'):
         if cg.target is None:
             await bot.edit_message_text(cid, mid, f'Set basic target group for errors'
-                                                  f'\n\nEnter errors log group ID',
+                                                  f'\n\nEnter errors log group ID 💬',
                                         reply_markup=keyboards('error_back', uid))
         else:
             await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
                                                   f'\n\nCurrent errors log ID : {cg.errors}'
-                                                  f'\n\nEnter group ID',
+                                                  f'\n\nEnter errors log group ID 💬',
                                         reply_markup=keyboards('error_back', uid))
         await pyrostep.register_next_step(uid, error_set)
 
@@ -164,36 +169,45 @@ async def freq_set(client, msg):
     await bot.delete_messages(cid, msg.id)
 
     if msg.text is None:
-        await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
-                                              f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                              f'\n\nEnter value in seconds (min 1 - 60 max)'
-                                              f'\n\n!!! Value must be digit !!!',
-                                    reply_markup=keyboards('freq_back', uid))
+        try:
+            await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
+                                                  f'\n\nCurrent frequency : {cg.refresh_freq}s'
+                                                  f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                  f'\n\n❌ Value must be digit ‼️',
+                                        reply_markup=keyboards('freq_back', uid))
+        except RPCError:
+            pass
         await pyrostep.register_next_step(uid, freq_set)
 
     else:
         if msg.text.isdigit():
             new = int(msg.text)
             if new < 1:
-                await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
-                                                      f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                      f'\n\nEnter value in seconds (min 1 - 60 max)'
-                                                      f'\n\n!!! Value to low  !!!',
-                                            reply_markup=keyboards('freq_back', uid))
+                try:
+                    await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
+                                                          f'\n\nCurrent frequency : {cg.refresh_freq}s'
+                                                          f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                          f'\n\n❌ Value to low ‼️',
+                                                reply_markup=keyboards('freq_back', uid))
+                except RPCError:
+                    pass
                 await pyrostep.register_next_step(uid, freq_set)
 
             elif new > 60:
-                await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
-                                                      f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                      f'\n\nEnter value in seconds (min 1 - 60 max)'
-                                                      f'\n\n!!! Value to high  !!!',
-                                            reply_markup=keyboards('freq_back', uid))
+                try:
+                    await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
+                                                          f'\n\nCurrent frequency : {cg.refresh_freq}s'
+                                                          f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                          f'\n\n❌ Value to high ‼️',
+                                                reply_markup=keyboards('freq_back', uid))
+                except RPCError:
+                    pass
                 await pyrostep.register_next_step(uid, freq_set)
 
             elif new == cg.refresh_freq:
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                      f'\n\nSame value nothing changed',
+                                                      f'\n\n☑️ Same value nothing changed',
                                             reply_markup=keyboards('freq_main', uid))
 
             else:
@@ -201,43 +215,83 @@ async def freq_set(client, msg):
                 # save
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                      f'\n\nFrequency changed',
+                                                      f'\n\n✅ Frequency changed',
                                             reply_markup=keyboards('freq_main', uid))
 
         else:
-            await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
-                                                  f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                  f'\n\nEnter value in seconds (min 1 - 60 max)'
-                                                  f'\n\n!!! Value must be digit !!!',
-                                        reply_markup=keyboards('freq_back', uid))
+            try:
+                await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
+                                                      f'\n\nCurrent frequency : {cg.refresh_freq}s'
+                                                      f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                      f'\n\n❌ Value must be digit ‼️',
+                                            reply_markup=keyboards('freq_back', uid))
+            except RPCError:
+                pass
             await pyrostep.register_next_step(uid, freq_set)
 
 
 async def target_set(client, msg):
+
     cid = msg.chat.id
     uid = msg.from_user.id
     mid = user_menu[uid].id
     await bot.delete_messages(cid, msg.id)
 
     if msg.text is None:
-        await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
-                                              f'\n\nCurrent target ID : {cg.target}'
-                                              f'\n\nEnter group ID'
-                                              f'\n\n!!! Value must be negative digit !!!',
-                                    reply_markup=keyboards('freq_back', uid))
-        await pyrostep.register_next_step(uid, freq_set)
+        try:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                  f'\n\nCurrent target ID : {cg.target}'
+                                                  f'\n\n❌ Value must be negative digit ‼️'
+                                                  f'\n\nEnter group ID 💬',
+                                        reply_markup=keyboards('target_back', uid))
+        except RPCError as e:
+            pass
+        await pyrostep.register_next_step(uid, target_set)
 
     else:
         try:
             target = int(msg.text)
-            # ciąg dalszy
+            if target > 0:
+                try:
+                    await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                          f'\n\nCurrent target ID : {cg.target}'
+                                                          f'\n\n❌ Value must be negative digit ‼️'
+                                                          f'\n\nEnter group ID 💬',
+                                                reply_markup=keyboards('target_back', uid))
+                except RPCError:
+                    pass
+                await pyrostep.register_next_step(uid, target_set)
+
+            else:
+                try:
+                    await bot.send_chat_action(target, enums.ChatAction.TYPING)
+                    cg.target = target
+                    # save
+                    await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                          f'\n\nCurrent target ID : {cg.target}'
+                                                          f'\n\n✅ Target changed',
+                                                reply_markup=keyboards('target_main', uid))
+                except RPCError as e:
+                    try:
+                        await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                              f'\n\nCurrent target ID : {cg.target}'
+                                                              f'\n\n⛔️ BOT can\'t write in this group'
+                                                              f'\n\nEnter group ID 💬',
+                                                    reply_markup=keyboards('target_back', uid))
+                    except RPCError:
+                        pass
+                    await pyrostep.register_next_step(uid, target_set)
+
         except ValueError:
-            await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
-                                                  f'\n\nCurrent target ID : {cg.target}'
-                                                  f'\n\nEnter group ID'
-                                                  f'\n\n!!! Value must be negative digit !!!',
-                                        reply_markup=keyboards('freq_back', uid))
-            await pyrostep.register_next_step(uid, freq_set)
+            try:
+                await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
+                                                      f'\n\nCurrent target ID : {cg.target}'
+                                                      f'\n\n❌ Value must be negative digit ‼️'
+                                                      f'\n\nEnter group ID 💬',
+                                            reply_markup=keyboards('target_back', uid))
+            except RPCError:
+                pass
+            await pyrostep.register_next_step(uid, target_set)
 
 
 async def error_set(client, msg):
@@ -246,6 +300,61 @@ async def error_set(client, msg):
     mid = user_menu[uid].id
     await bot.delete_messages(cid, msg.id)
 
+    if msg.text is None:
+        try:
+            await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                  f'\n\nCurrent errors log ID : {cg.target}'
+                                                  f'\n\n❌ Value must be negative digit ‼️'
+                                                  f'\n\nEnter errors log group ID 💬',
+                                        reply_markup=keyboards('error_back', uid))
+        except RPCError as e:
+            pass
+        await pyrostep.register_next_step(uid, error_set)
+
+    else:
+        try:
+            errors = int(msg.text)
+            if errors > 0:
+                try:
+                    await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                          f'\n\nCurrent errors log ID : {cg.errors}'
+                                                          f'\n\n❌ Value must be negative digit ‼️'
+                                                          f'\n\nEnter errors log group ID 💬',
+                                                reply_markup=keyboards('error_back', uid))
+                except RPCError:
+                    pass
+                await pyrostep.register_next_step(uid, error_set)
+
+            else:
+                try:
+                    await bot.send_chat_action(errors, enums.ChatAction.TYPING)
+                    cg.errors = errors
+                    # save
+                    await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                          f'\n\nCurrent errors log ID : {cg.errors}'
+                                                          f'\n\n✅ Errors log group changed',
+                                                reply_markup=keyboards('error_main', uid))
+                except RPCError as e:
+                    try:
+                        await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                              f'\n\nCurrent errors log ID : {cg.errors}'
+                                                              f'\n\n⛔️ BOT can\'t write in this group'
+                                                              f'\n\nEnter errors log group ID 💬',
+                                                    reply_markup=keyboards('error_back', uid))
+                    except RPCError:
+                        pass
+                    await pyrostep.register_next_step(uid, error_set)
+
+        except ValueError:
+            try:
+                await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
+                                                      f'\n\nCurrent errors log ID : {cg.errors}'
+                                                      f'\n\n❌ Value must be negative digit ‼️'
+                                                      f'\n\nEnter errors log group ID 💬',
+                                            reply_markup=keyboards('error_back', uid))
+            except RPCError:
+                pass
+            await pyrostep.register_next_step(uid, error_set)
 
 try:
     bot.stop()
