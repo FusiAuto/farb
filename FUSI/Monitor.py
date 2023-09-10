@@ -18,8 +18,8 @@ class Monitor(Thread):
             "os": "h5",
             "cid": "ftsH5",
             "webVersion": "1000",
-            "uid": cg.user_uid,
-            "token": cg.user_token,
+            "uid": cg.fs_user_uid,
+            "token": cg.fs_user_token,
             "pageNum": "1",
             "pageSize": "99",  # what max ?
             "pass": "true",
@@ -62,7 +62,7 @@ class Monitor(Thread):
 
                 elif data['code'] == -1000:
                     self.bot.send_message(cg.errors, 'Token expired')
-                    self.bot.send_message(cg.admin, 'Token expired')
+                    self.bot.send_message(cg.MASTER, 'Token expired')
                     print(f'{now_is()} - {cg.RED}Token expired{cg.RESET}\n')
                     break
 

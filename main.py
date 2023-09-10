@@ -4,6 +4,7 @@ import pyrostep
 import DATA.common_globals as cg
 from pyrogram import Client, filters, idle, enums
 from pyrogram.errors import RPCError
+from COM.save import save
 from FUSI.Monitor import Monitor
 from COM.now_is import now_is
 from TG_BOT.keyboards import keyboards
@@ -212,7 +213,7 @@ async def freq_set(client, msg):
 
             else:
                 cg.refresh_freq = new
-                # save
+                save(cg.refresh_freq, f'{PATH}/DATA/refresh_freq')
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
                                                       f'\n\n✅ Frequency changed',
@@ -266,7 +267,7 @@ async def target_set(client, msg):
                 try:
                     await bot.send_chat_action(target, enums.ChatAction.TYPING)
                     cg.target = target
-                    # save
+                    save(cg.target, f'{PATH}/DATA/target')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
                                                           f'\n\nCurrent target ID : {cg.target}'
                                                           f'\n\n✅ Target changed',
@@ -329,7 +330,7 @@ async def error_set(client, msg):
                 try:
                     await bot.send_chat_action(errors, enums.ChatAction.TYPING)
                     cg.errors = errors
-                    # save
+                    save(cg.errors, f'{PATH}/DATA/errors')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
                                                           f'\n\nCurrent errors log ID : {cg.errors}'
                                                           f'\n\n✅ Errors log group changed',
