@@ -8,20 +8,8 @@ def config():
     if not os.path.isdir(f'{cg.PATH}/VIDS/TEMP'):
         os.makedirs(f'{cg.PATH}/VIDS/TEMP')
 
-    rfq_path = f'{cg.PATH}/DATA/refresh_freq'
-    err_path = f'{cg.PATH}/DATA/errors'
-    tgt_path = f'{cg.PATH}/DATA/target'
     fs_api_path = f'{cg.PATH}/DATA/fs_api'
     cfg_path = f'{cg.PATH}/DATA/config'
-
-    if os.path.isfile(rfq_path):
-        cg.refresh_freq = load(rfq_path)
-
-    if os.path.isfile(err_path):
-        cg.errors = load(err_path)
-
-    if os.path.isfile(tgt_path):
-        cg.target = load(tgt_path)
 
     if os.path.isfile(fs_api_path):
         fs_api = load(fs_api_path)
@@ -33,6 +21,7 @@ def config():
 
     if os.path.isfile(cfg_path):
         cfg = load(cfg_path)
+        cg.config = cfg
         cg.fs_user_token = cfg['fs_user_token']
         cg.fs_user_uid = cfg['fs_user_uid']
         cg.target = cfg['target']

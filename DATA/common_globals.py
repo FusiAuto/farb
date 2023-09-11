@@ -26,6 +26,7 @@ referer = None
 
 
 # COMMON FROM CONFIG FILE
+config = {}
 fs_user_token = None
 fs_user_uid = None
 MASTER = None

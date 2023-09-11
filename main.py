@@ -211,7 +211,12 @@ async def freq_set(client, msg):
 
             else:
                 cg.refresh_freq = new
-                save(cg.refresh_freq, f'{cg.PATH}/DATA/refresh_freq')
+                for k, v in cg.config.items():
+                    if k == 'refresh_freq':
+                        cg.config[k] = new
+                    else:
+                        cg.config[k] = v
+                save(cg.config, f'{cg.PATH}/DATA/config')
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
                                                       f'\n\n✅ Frequency changed',
@@ -265,7 +270,12 @@ async def target_set(client, msg):
                 try:
                     await bot.send_chat_action(target, enums.ChatAction.TYPING)
                     cg.target = target
-                    save(cg.target, f'{cg.PATH}/DATA/target')
+                    for k, v in cg.config.items():
+                        if k == 'target':
+                            cg.config[k] = target
+                        else:
+                            cg.config[k] = v
+                    save(cg.config, f'{cg.PATH}/DATA/config')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for videos'
                                                           f'\n\nCurrent target ID : {cg.target}'
                                                           f'\n\n✅ Target changed',
@@ -328,7 +338,12 @@ async def error_set(client, msg):
                 try:
                     await bot.send_chat_action(errors, enums.ChatAction.TYPING)
                     cg.errors = errors
-                    save(cg.errors, f'{cg.PATH}/DATA/errors')
+                    for k, v in cg.config.items():
+                        if k == 'errors':
+                            cg.config[k] = errors
+                        else:
+                            cg.config[k] = v
+                    save(cg.config, f'{cg.PATH}/DATA/config')
                     await bot.edit_message_text(cid, mid, f'Change basic target group for errors'
                                                           f'\n\nCurrent errors log ID : {cg.errors}'
                                                           f'\n\n✅ Errors log group changed',
