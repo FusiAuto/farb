@@ -40,4 +40,6 @@ def config():
         cg.refresh_freq = cfg['refresh_freq']
         cg.MASTER = cfg['MASTER']
         cg.admins = cfg['admins']
+        cg.notify_users = cfg['notify_users']
         cg.notify_users.add(cg.MASTER)
+        cg.admins.add(cg.MASTER)

@@ -67,6 +67,8 @@ async def menu_command(client, msg):
 async def callback_query(client, call):
     cid = call.message.chat.id
     mid = call.message.id
+    # await bot.answer_callback_query(call.id, text='ALERT', show_alert=True)
+
     try:
         uid = int(call.data.split('.')[1])
     except IndexError:
