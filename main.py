@@ -147,6 +147,20 @@ async def callback_query(client, call):
                                         reply_markup=keyboards('error_back', uid))
         await pyrostep.register_next_step(uid, error_set)
 
+    # FUSI TOKEN
+        if call.data.startswith('ftoken_main'):
+
+            await bot.edit_message_text(cid, mid, f'Set/change FUSI token'
+                                                  f'\n\nCurrent token : {cg.fs_user_token}',
+                                        reply_markup=keyboards('ftoken_set', uid))
+
+        if call.data.startswith('ftoken_set'):
+            await bot.edit_message_text(cid, mid, f'Set/change FUSI token'
+                                                  f'\n\nCurrent token : {cg.fs_user_token}'
+                                                  f'\n\nEnter token 💬',
+                                        reply_markup=keyboards('ftoken_back', uid))
+            await pyrostep.register_next_step(uid, ftoken_set)
+
     # UNLOCK
     if call.data.startswith('unlock'):
         unlock_id = int(call.data.split('.')[1])
@@ -369,6 +383,39 @@ async def error_set(client, msg):
             except RPCError:
                 pass
             await pyrostep.register_next_step(uid, error_set)
+
+
+async def ftoken_set(client, msg):
+    cid = msg.chat.id
+    uid = msg.from_user.id
+    mid = user_menu[uid].id
+    await bot.delete_messages(cid, msg.id)
+
+    if msg.text is None:
+        try:
+            await bot.edit_message_text(cid, mid, f'Set/change FUSI token'
+                                                  f'\n\nCurrent token : {cg.fs_user_token}'
+                                                  f'\n\n❌ FUSI token must be text ‼️'
+                                                  f'\n\nEnter token 💬',
+                                        reply_markup=keyboards('ftoken_back', uid))
+        except RPCError as e:
+            pass
+        await pyrostep.register_next_step(uid, ftoken_set)
+
+    else:
+        cg.fs_user_token = msg.text
+        for k, v in cg.config.items():
+            if k == 'fs_user_token':
+                cg.config[k] = msg.text
+            else:
+                cg.config[k] = v
+        save(cg.config, f'{cg.PATH}/DATA/config')
+        await bot.edit_message_text(cid, mid, f'Set/change FUSI token'
+                                              f'\n\nCurrent token : {cg.fs_user_token}'
+                                              f'\n\n✅ FUSI token changed',
+                                    reply_markup=keyboards('ftoken_main', uid))
+        Monitor(bot).start()
+
 
 try:
     bot.stop()

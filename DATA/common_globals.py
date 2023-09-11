@@ -36,5 +36,10 @@ refresh_freq = 1
 admins = set()
 notify_users = set()
 
+# USERS
+users = {}
+# fs_user_token = None
+# fs_user_uid = None
+
 current_records = set()
 
