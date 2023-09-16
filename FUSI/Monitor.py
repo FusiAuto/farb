@@ -10,7 +10,7 @@ class Monitor(Thread):
     def __init__(self, bot) -> None:
         Thread.__init__(self)
         self.bot = bot
-        self.name = 'MONITOR'
+        self.name = 'FUSI MONITOR'
         self.url = cg.lives_url
         self.querystring = {
             "lang": "1",
@@ -20,7 +20,7 @@ class Monitor(Thread):
             "uid": cg.fs_user_uid,
             "token": cg.fs_user_token,
             "pageNum": "1",
-            "pageSize": "99",  # what max ?
+            "pageSize": "99",
             "pass": "true",
             "pageID": cg.page_id
         }

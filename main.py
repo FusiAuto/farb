@@ -8,6 +8,8 @@ from COM.config import config
 from COM.save import save
 from FUSI.Monitor import Monitor
 from COM.now_is import now_is
+from FUSI.follow import follow
+from FUSI.userinfo import userinfo
 from TG_BOT.keyboards import keyboards
 # from keep_alive import keep_alive
 
@@ -61,6 +63,15 @@ async def menu_command(client, msg):
                                      '\n\nSelect option',
                                 reply_markup=keyboards('menu', uid))
     user_menu[uid] = bm
+
+
+@bot.on_message(filters.text)
+async def text_msg(client, msg):
+    fid = msg.text
+    if fid.isdigit() and len(fid) <= 7:
+        text = userinfo(fid)
+        if text is not None:
+            await msg.reply(text, reply_markup=keyboards('follow', fid))
 
 
 @bot.on_callback_query()
@@ -171,6 +182,26 @@ async def callback_query(client, call):
             pass
 
     if call.data == 'exit':
+        await bot.delete_messages(cid, mid)
+
+    # FOLLOW / UNFOLLOW
+
+    if call.data.startswith('follow'):
+        fid = int(call.data.split('.')[1])
+        if follow(fid, 1):
+            await bot.answer_callback_query(call.id, f'✅ {fid} Followed', show_alert=True)
+        else:
+            await bot.answer_callback_query(call.id, f'☑️ {fid} Already followed', show_alert=True)
+
+        await bot.delete_messages(cid, mid)
+
+    if call.data.startswith('unfollow'):
+        fid = int(call.data.split('.')[1])
+        if follow(fid, 2):
+            await bot.answer_callback_query(call.id, f'✅ {fid} Unfollowed', show_alert=True)
+        else:
+            await bot.answer_callback_query(call.id, f'☑️ {fid} Already unfollowed', show_alert=True)
+
         await bot.delete_messages(cid, mid)
 
 
@@ -425,8 +456,8 @@ except ConnectionError:
 bot.start()
 
 config()
-monitor = Monitor(bot)
-monitor.start()
+# monitor = Monitor(bot)
+# monitor.start()
 # keep_alive()
 
 print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')

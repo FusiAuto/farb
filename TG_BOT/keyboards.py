@@ -115,3 +115,15 @@ def keyboards(keyboard, param=None):
         buttons.append([btn1])
         kb = InlineKeyboardMarkup(buttons)
         return kb
+
+    # FOLLOW
+    if keyboard == 'follow':
+        btn1 = InlineKeyboardButton('FOLLOW', callback_data=f'follow.{param}')
+        btn2 = InlineKeyboardButton('UNFOLLOW', callback_data=f'unfollow.{param}')
+        btn3 = InlineKeyboardButton('CLOSE', callback_data=f'exit')
+        buttons = [
+            [btn1, btn2],
+            [btn3]
+        ]
+        kb = InlineKeyboardMarkup(buttons)
+        return kb
