@@ -22,7 +22,7 @@ class Monitor(Thread):
             "pageNum": "1",
             "pageSize": "99",
             "pass": "true",
-            "pageID": cg.page_id
+            "pageID": cg.main_page_id
         }
         self.headers = {"referer": cg.referer}
         self.stop = False

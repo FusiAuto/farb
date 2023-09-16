@@ -15,8 +15,11 @@ def config():
         fs_api = load(fs_api_path)
         cg.lives_url = fs_api['lives_url']
         cg.links_url = fs_api['links_url']
+        cg.user_url = fs_api['user_url']
+        cg.follow_url = fs_api['follow_url']
         cg.host = fs_api['host']
-        cg.page_id = fs_api['page_id']
+        cg.main_page_id = fs_api['main_page_id']
+        cg.user_page_id = fs_api['user_page_id']
         cg.referer = fs_api['referer']
 
     if os.path.isfile(cfg_path):

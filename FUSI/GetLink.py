@@ -13,7 +13,7 @@ class GetLink:
             "cid": "ftsH5",
             "webVersion": "1000",
             "roomId": uid,
-            "pageID": cg.page_id
+            "pageID": cg.main_page_id
         }
         self.headers = {
             "Host": cg.host,

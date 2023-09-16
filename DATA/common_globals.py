@@ -20,9 +20,11 @@ PATH = None
 # local version - file
 lives_url = None
 links_url = None
+user_url = None
+follow_url = None
 host = None
-page_id = None
-f_page_id = "f1834356ff22ff0569ec9d608e521b4a"
+main_page_id = None
+user_page_id = None
 referer = None
 
 
@@ -33,7 +35,7 @@ fs_user_uid = None
 MASTER = None
 target = None
 errors = None
-refresh_freq = 1
+refresh_freq = 0
 admins = set()
 notify_users = set()
 

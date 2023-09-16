@@ -3,7 +3,7 @@ import DATA.common_globals as cg
 
 
 def follow(fid, opt):
-    url = "https://cpapi.footseen.xyz/room/likeOpt"
+    url = cg.follow_url
     querystring = {"lang": "1",
                    "os": "h5",
                    "cid": "ftsH5",
@@ -12,7 +12,7 @@ def follow(fid, opt):
                    "token": cg.fs_user_token,
                    "roomId": fid,
                    "optType": opt,
-                   "pageID": cg.f_page_id}
+                   "pageID": cg.user_page_id}
     headers = {"referer": cg.referer}
 
     response = requests.request("GET", url, headers=headers, params=querystring)

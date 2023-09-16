@@ -78,7 +78,6 @@ async def text_msg(client, msg):
 async def callback_query(client, call):
     cid = call.message.chat.id
     mid = call.message.id
-    # await bot.answer_callback_query(call.id, text='ALERT', show_alert=True)
 
     try:
         uid = int(call.data.split('.')[1])
@@ -108,7 +107,7 @@ async def callback_query(client, call):
     if call.data.startswith('freq_set'):
         await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                               f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                              f'\n\nEnter value in seconds (min 1 - 60 max) 💬',
+                                              f'\n\nEnter value in seconds (min 0 - 60 max) 💬',
                                     reply_markup=keyboards('freq_back', uid))
         await pyrostep.register_next_step(uid, freq_set)
 
@@ -216,7 +215,7 @@ async def freq_set(client, msg):
         try:
             await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                   f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                  f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                  f'\n\nEnter value in seconds (min 0 - 60 max) 💬'
                                                   f'\n\n❌ Value must be digit ‼️',
                                         reply_markup=keyboards('freq_back', uid))
         except RPCError:
@@ -226,11 +225,11 @@ async def freq_set(client, msg):
     else:
         if msg.text.isdigit():
             new = int(msg.text)
-            if new < 1:
+            if new < 0:
                 try:
                     await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                           f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                          f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                          f'\n\nEnter value in seconds (min 0 - 60 max) 💬'
                                                           f'\n\n❌ Value to low ‼️',
                                                 reply_markup=keyboards('freq_back', uid))
                 except RPCError:
@@ -241,7 +240,7 @@ async def freq_set(client, msg):
                 try:
                     await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                           f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                          f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                          f'\n\nEnter value in seconds (min 0 - 60 max) 💬'
                                                           f'\n\n❌ Value to high ‼️',
                                                 reply_markup=keyboards('freq_back', uid))
                 except RPCError:
@@ -271,7 +270,7 @@ async def freq_set(client, msg):
             try:
                 await bot.edit_message_text(cid, mid, f'Set monitor refresh frequency in seconds'
                                                       f'\n\nCurrent frequency : {cg.refresh_freq}s'
-                                                      f'\n\nEnter value in seconds (min 1 - 60 max) 💬'
+                                                      f'\n\nEnter value in seconds (min 0 - 60 max) 💬'
                                                       f'\n\n❌ Value must be digit ‼️',
                                             reply_markup=keyboards('freq_back', uid))
             except RPCError:
@@ -456,8 +455,8 @@ except ConnectionError:
 bot.start()
 
 config()
-# monitor = Monitor(bot)
-# monitor.start()
+monitor = Monitor(bot)
+monitor.start()
 # keep_alive()
 
 print(f'{now_is()} - {cg.GREEN}BOT STARTED{cg.RESET}\n')
