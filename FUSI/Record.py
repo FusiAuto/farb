@@ -27,9 +27,14 @@ class Record(Thread):
               f'\n                                     TITLE : {self.title}{cg.RESET}\n')
         for user in cg.notify_users:
             try:
-                self.bot.send_message(user, f'⏺ 🎥 AUTO Recording [ID {self.uid}  |  {self.u_name}]({self.url})'
-                                            f'\nCOUNTRY : {self.country}'
-                                            f'\nTITLE : {self.title}')
+                if user == cg.MASTER:
+                    self.bot.send_message(user, f'⏺ 🎥 AUTO Recording [ID {self.uid}  |  {self.u_name}]({self.url})'
+                                                f'\nCOUNTRY : {self.country}'
+                                                f'\nTITLE : {self.title}')
+                else:
+                    self.bot.send_message(user, f'⏺ 🎥 AUTO Recording [ID {self.uid}  |  {self.u_name}]({self.url})'
+                                                f'\nCOUNTRY : {self.country}'
+                                                f'\nTITLE : {self.title}', protect_content=True)
             except RPCError:
                 pass
 
@@ -52,7 +57,12 @@ class Record(Thread):
                   f'{cg.BLUE}ID {self.uid}  |  {self.u_name} - {time}{cg.RESET}\n')
             for user in cg.notify_users:
                 try:
-                    self.bot.send_message(user, f'⏹ 📼 Record finished ID {self.uid}  |  {self.u_name}  - {time}')
+                    if user == cg.MASTER:
+                        self.bot.send_message(user, f'⏹ 📼 Record finished ID {self.uid}  |  {self.u_name}  - {time}')
+                    else:
+                        self.bot.send_message(user, f'⏹ 📼 Record finished ID {self.uid}  |  {self.u_name}  - {time}',
+                                              protect_content=True)
+
                 except RPCError:
                     pass
 

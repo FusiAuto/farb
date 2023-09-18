@@ -116,7 +116,7 @@ def keyboards(keyboard, param=None):
         kb = InlineKeyboardMarkup(buttons)
         return kb
 
-    # FOLLOW
+    # FOLLOW / UNFOLLOW
     if keyboard == 'follow':
         btn1 = InlineKeyboardButton('FOLLOW', callback_data=f'follow.{param}')
         btn2 = InlineKeyboardButton('UNFOLLOW', callback_data=f'unfollow.{param}')

