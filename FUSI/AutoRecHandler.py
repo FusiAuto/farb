@@ -61,8 +61,7 @@ class AutoRecHandler(Thread):
                                                  duration=data['duration'],
                                                  width=data['width'],
                                                  height=data['height'],
-                                                 file_name=tg_filename,
-                                                 supports_streaming=True)
+                                                 file_name=tg_filename)
 
                     else:
                         thumbs = gen_thumbs(filename, data)
@@ -73,8 +72,7 @@ class AutoRecHandler(Thread):
                                                      width=data['width'],
                                                      height=data['height'],
                                                      thumb=thumbs,
-                                                     file_name=tg_filename,
-                                                     supports_streaming=True)
+                                                     file_name=tg_filename)
                             if bm is not None:
                                 os.remove(thumbs)
 
@@ -84,8 +82,7 @@ class AutoRecHandler(Thread):
                                                      duration=data['duration'],
                                                      width=data['width'],
                                                      height=data['height'],
-                                                     file_name=tg_filename,
-                                                     supports_streaming=True)
+                                                     file_name=tg_filename)
                     if bm is not None:
                         os.remove(filename)
                         video = bm.video.file_id

@@ -67,11 +67,13 @@ async def menu_command(client, msg):
 
 @bot.on_message(filters.text)
 async def text_msg(client, msg):
-    fid = msg.text
-    if fid.isdigit() and len(fid) <= 7:
-        text = userinfo(fid)
-        if text is not None:
-            await msg.reply(text, reply_markup=keyboards('follow', fid))
+    uid = msg.from_user.id
+    if uid == cg.MASTER:
+        fid = msg.text
+        if fid.isdigit() and len(fid) <= 7:
+            text = userinfo(fid)
+            if text is not None:
+                await msg.reply(text, reply_markup=keyboards('follow', fid))
 
 
 @bot.on_callback_query()
