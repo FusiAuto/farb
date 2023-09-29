@@ -19,8 +19,11 @@ def userinfo(fid):
             try:
                 nick = response['zoneInfo']['nickname']
                 country = response['zoneInfo']['addr']
+                followme = response['zoneData']['followme']
+                myfollow = response['zoneData']['myfollow']
                 text = (f'{fid} | {nick}'
-                        f'\nCOUNTRY : {country}')
+                        f'\nCOUNTRY : {country}'
+                        f'\nFANS : {followme}  |  FOLLOWED : {myfollow}')
                 return text
             except KeyError:
                 return None
